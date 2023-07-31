@@ -16,14 +16,11 @@ namespace Wishlist {
     wishlistName: string;
   }
 
-  export async function create_wishlist(
-    user: Register.User,
-    wishlist: wishlist
-  ) {
+  export async function create_wishlist(userid: any, wishlistname: string) {
     const add_wishlist = await db.prisma.wishlist.create({
       data: {
-        userId: ,
-        wishlistName: "",
+        userId: userid.user.id,
+        wishlistName: wishlistname,
       },
     });
   }
