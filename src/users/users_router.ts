@@ -3,15 +3,21 @@ import { PrismaClient } from "@prisma/client";
 import Authentication from "./authentication";
 import Register from "./register";
 import db from "../db";
-
+import { configDotenv } from "dotenv";
 const users_router = express.Router();
 
 users_router.post("/login", async (req, res) => {
   let token = await Authentication.create_token(req.body);
 
-  console.log(token);
-
   res.send({ access_token: token });
+});
+
+users_router.get("/", async (req, res) => {
+  const token = req.body.token;
+
+  const user = await Authentication.get_user(token);
+
+  res.send(user);
 });
 
 users_router.post("/register", (req, res) => {
