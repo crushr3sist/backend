@@ -9,7 +9,7 @@
 ### Wishlists
 
     - POST /wishlist/create/wishlist/ (token: string, wishListName: string) -> creates wishlist
-    - GET /wishlist/get/wishlists (token: string) -> returns Wishlists
+    - GET /wishlist/get/wishlists     (token: string) -> returns Wishlists
 
 ## to run
 
