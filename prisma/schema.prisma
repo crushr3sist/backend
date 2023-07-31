@@ -1,23 +1,32 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
-  username String?
-  password String?
+  id       String @id @default(uuid())
+  email    String @unique
+  username String
+  password String
 
-  wishlist Wishlist[]
+  wishlist     Wishlist[]
+  WishlistItem WishlistItem[]
 }
 
 model Wishlist {
-  id            Int      @id @default(autoincrement())
-  User          User?    @relation(fields: [userId], references: [id])
+  id     Int     @id @default(autoincrement())
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  wishlistName String
+  WishlistItem WishlistItem[]
+}
+
+model WishlistItem {
+  id            Int       @id @default(autoincrement())
+  User          User?     @relation(fields: [userId], references: [id])
   userId        String?
   product       String
   url           String
   date          DateTime
   current_price Int
+  Wishlist      Wishlist? @relation(fields: [wishlistId], references: [id])
+  wishlistId    Int?
 }
 
 generator client {

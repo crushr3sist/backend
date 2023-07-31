@@ -1,53 +1,19 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
+import Authentication from "./authentication";
+import Register from "./register";
+import db from "../db";
 
 const users_router = express.Router();
 
-users_router.get("/", (req, res) => {
-  res.send({ title: "hellooo " });
+users_router.post("/login", async (req, res) => {
+  let token = await Authentication.create_token(req.body);
+
+  console.log(token);
+
+  res.send({ access_token: token });
 });
-namespace db {
-  export const prisma = new PrismaClient();
-}
 
-namespace Authentication {
-  interface Auth {
-    username: string;
-    password: string;
-  }
-
-  async function check_if_user_exists(user: Auth): Promise<boolean> {
-    const user_is_found = db.prisma.user.findFirst({
-      where: {
-        username: user.username,
-        password: user.password,
-      },
-    });
-    if (user_is_found) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-}
-
-namespace Register {
-  interface User {
-    username: string;
-    password: string;
-    email: string;
-  }
-
-  export async function register(user: User) {
-    const reguser = await db.prisma.user.create({
-      data: {
-        username: user.username,
-        email: user.email,
-        password: user.password,
-      },
-    });
-  }
-}
 users_router.post("/register", (req, res) => {
   console.log("Got body:", req.body);
 

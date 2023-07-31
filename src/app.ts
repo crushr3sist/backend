@@ -7,12 +7,9 @@ import cors from "cors";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import users_router from "./users/users_router";
+// import wishlist_router from "./wishlist/wishlist_router";
 
 dontenv.config();
-
-/**
- * App Variables
- */
 
 if (!process.env.PORT) {
   process.exit(1);
@@ -21,18 +18,14 @@ if (!process.env.PORT) {
 const PORT: number = parseInt(process.env.PORT as string, 10);
 
 const app = express();
-/**
- *  App Configuration
- */
+
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/users", users_router);
-/**
- * Server Activation
- */
+// app.use("/wishlist", wishlist_router);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
