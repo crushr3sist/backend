@@ -6,13 +6,12 @@ import Authentication from "../users/authentication";
 
 const wishlist_router = express.Router();
 
-wishlist_router.post("/create/item", (req, res) => {});
+wishlist_router.post("/create/item", async (req, res) => {});
 
 wishlist_router.post("/create/wishlist", async (req, res) => {
   const wishlist_data = req.body;
 
   const user = await Authentication.get_user(wishlist_data.token);
-  console.log(user);
 
   Wishlist.create_wishlist(user, wishlist_data.wishListName)
 
@@ -22,9 +21,16 @@ wishlist_router.post("/create/wishlist", async (req, res) => {
     .catch(async (e) => {
       console.error(e);
       await db.prisma.$disconnect();
-      res.send(`there was an error creating the user: error\n${e}`);
       process.exit(1);
     });
   res.sendStatus(200);
 });
+
+wishlist_router.get("/get/wishlists", async (req, res) => {
+  const user = await Authentication.get_user(req.body.token);
+  const wishlists = await Wishlist.getWishlists(user);
+
+  res.send({ wishlists: wishlists });
+});
+
 export default wishlist_router;
