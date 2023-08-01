@@ -22,7 +22,10 @@ namespace Authentication {
   };
 
   export const get_user = async (token: string) => {
-    const decoded = await jwt.verify(token, process.env.ACCESS_SECRET);
+    const decoded = await jwt.verify(
+      token,
+      process.env.ACCESS_SECRET as string
+    );
     return decoded;
   };
 
@@ -31,9 +34,13 @@ namespace Authentication {
     console.log(process.env.ACCESS_SECRET);
     console.log(_user);
 
-    return await jwt.sign({ user: _user }, process.env.ACCESS_SECRET, {
-      expiresIn: 60 * 60 * 7,
-    });
+    return await jwt.sign(
+      { user: _user },
+      process.env.ACCESS_SECRET as string,
+      {
+        expiresIn: 60 * 60 * 7,
+      }
+    );
   };
 }
 
