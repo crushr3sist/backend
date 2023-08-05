@@ -1,17 +1,12 @@
-import express from "express";
-import { PrismaClient } from "@prisma/client";
 import db from "../db";
 import jwt from "jsonwebtoken";
-import { GetResult } from "@prisma/client/runtime/library";
 import "dotenv/config";
-import { configDotenv } from "dotenv";
 
 namespace Authentication {
   interface Auth {
     username: string;
     password: string;
   }
-  const config = configDotenv();
   const check_if_user_exists = async (user: Auth) => {
     return await db.prisma.user.findFirst({
       where: {

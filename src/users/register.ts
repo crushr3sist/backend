@@ -20,13 +20,19 @@ namespace Register {
   }
 
   export async function register(user: User) {
-    const reg_user = await db.prisma.user.create({
-      data: {
-        username: user.username,
-        email: user.email,
-        password: user.password,
-      },
-    });
+    try {
+      const reg_user = await db.prisma.user.create({
+        data: {
+          username: user.username,
+          email: user.email,
+          password: user.password,
+        },
+      });
+    } catch {
+      (e) => {
+        console.log(e);
+      };
+    }
   }
 }
 
