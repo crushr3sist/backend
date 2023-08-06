@@ -26,6 +26,33 @@ namespace Authentication {
 
   export const create_token = async (user: Auth) => {
     const _user = await check_if_user_exists(user);
+    const date = Date.now();
+    const timeDiff = 60 * 60 * 24 * 30;
+
+    const expTime = Math.floor(date / 1000) + timeDiff;
+    console.log(expTime);
+
+    console.log(process.env.ACCESS_SECRET);
+    console.log(_user);
+    return await jwt.sign(
+      { user: _user },
+      process.env.ACCESS_SECRET as string,
+      {
+        expiresIn: expTime,
+      }
+    );
+  };
+
+  export const refreshToken = async (token: string) => {
+    const date = Date.now();
+    const timeDiff = 60 * 60 * 24 * 30;
+
+    const expTime = Math.floor(date / 1000) + timeDiff;
+
+    const tokenDecoded = Authentication.get_user(token);
+
+    const _user = await check_if_user_exists(tokenDecoded);
+
     console.log(process.env.ACCESS_SECRET);
     console.log(_user);
 
@@ -33,7 +60,7 @@ namespace Authentication {
       { user: _user },
       process.env.ACCESS_SECRET as string,
       {
-        expiresIn: 60 * 60 * 7,
+        expiresIn: expTime,
       }
     );
   };

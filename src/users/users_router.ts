@@ -5,19 +5,21 @@ import Register from "./register";
 import db from "../db";
 const users_router = express.Router();
 
-users_router.post("/login", async (req, res, next) => {
-  let token = await Authentication.create_token(req.body);
-
-  res.send({ access_token: token });
+users_router.post("/refresh", async (req, res, next) => {
+  try {
+    let token = await Authentication.refreshToken(req.body.token);
+    res.send({ access_token: token });
+  } catch {
+    throw new Error("Error refreshing");
+  }
 });
 
-users_router.get("/", async (req, res, next) => {
+users_router.post("/login", async (req, res, next) => {
   try {
-    const token = req.body.token;
-    const user = await Authentication.get_user(token);
-    res.send(user);
-  } catch {
-    throw new Error("Error with login");
+    let token = await Authentication.create_token(req.body);
+    res.send({ access_token: token });
+  } catch (err) {
+    throw new Error(err);
   }
 });
 
