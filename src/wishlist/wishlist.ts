@@ -20,16 +20,20 @@ namespace Wishlist {
     });
   }
 
-  export async function create_wishlist_item(user: Register.User) {
+  export async function addToWishlist(user: any, wishlistBody: any) {
     /**
      * The function creates a wishlist item for a user in a TypeScript application.
      * @param user - The parameter "user" is of type "Register.User".
      */
-    await db.prisma.user.create({
+
+    await db.prisma.wishlistItem.create({
       data: {
-        username: user.username,
-        email: user.email,
-        password: user.password,
+        userId: user.id,
+        wishlistId: parseInt(wishlistBody.wishlistId),
+        product: wishlistBody.product,
+        url: wishlistBody.url,
+        current_price: parseInt(wishlistBody.current_price),
+        date: new Date(),
       },
     });
   }
@@ -40,6 +44,23 @@ namespace Wishlist {
         userId: user.userId,
       },
     });
+  }
+  export async function getAll(user: any) {
+    const wishlists = await db.prisma.wishlist.findMany({
+      where: {
+        userId: user.id,
+      },
+    });
+    console.log(wishlists);
+    const wishlistsItems = await db.prisma.wishlistItem.findMany({
+      where: {
+        userId: user.id,
+      },
+    });
+    return {
+      wishlists,
+      wishlistsItems,
+    };
   }
 }
 

@@ -14,6 +14,15 @@ users_router.post("/refresh", async (req, res, next) => {
   }
 });
 
+users_router.post("/", async (req, res, next) => {
+  try {
+    let user = await Authentication.get_user_record(req.body.token);
+    res.send({ user: user });
+  } catch {
+    throw new Error("Error refreshing");
+  }
+});
+
 users_router.post("/login", async (req, res, next) => {
   try {
     let token = await Authentication.create_token(req.body);
