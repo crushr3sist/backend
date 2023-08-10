@@ -35,7 +35,5 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgres://ronnyisadmin:GnrX45s7mqQSwrskcHeZe1Oal6E8P7If@dpg-cja6j16e546c73eftar0-a.singapore-postgres.render.com/wishlistapp" // uses connection pooling
-  // directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-  // shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+  url      = "postgres://postgres:Deus69Ex6@localhost/postgres" // uses connection pooling
 }

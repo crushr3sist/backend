@@ -28,22 +28,25 @@ users_router.post("/login", async (req, res, next) => {
     let token = await Authentication.create_token(req.body);
     res.send({ access_token: token });
   } catch (err) {
-    throw new Error(err);
+    throw new Error("error with login");
   }
 });
 
 users_router.post("/register", async (req, res, next) => {
-  console.log("Got body:", req.body);
-  Register.register(req.body)
-    .then(async () => {
-      await db.prisma.$disconnect();
-    })
-    .catch(async (err) => {
-      console.error(err);
-      await db.prisma.$disconnect();
-      next(err);
-      process.exit(1);
-    });
+  try {
+    Register.register(req.body)
+      .then(async () => {
+        await db.prisma.$disconnect();
+      })
+      .catch(async (err) => {
+        console.error(err);
+        await db.prisma.$disconnect();
+        next(err);
+        process.exit(1);
+      });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 export default users_router;
