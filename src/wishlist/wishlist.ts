@@ -46,21 +46,17 @@ namespace Wishlist {
     });
   }
   export async function getAll(user: any) {
-    const wishlists = await db.prisma.wishlist.findMany({
+    let wishlists = await db.prisma.wishlist.findMany({
       where: {
         userId: user.id,
       },
     });
-    console.log(wishlists);
+
     const wishlistsItems = await db.prisma.wishlistItem.findMany({
       where: {
         userId: user.id,
       },
     });
-    return {
-      wishlists,
-      wishlistsItems,
-    };
   }
 }
 
