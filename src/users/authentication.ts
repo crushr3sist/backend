@@ -1,5 +1,5 @@
 import db from "../db";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import "dotenv/config";
 
 namespace Authentication {
@@ -7,7 +7,7 @@ namespace Authentication {
     username: string;
     password: string;
   }
-  const check_if_user_exists = async (user: Auth) => {
+  const check_if_user_exists = async (user: any) => {
     return await db.prisma.user.findFirst({
       where: {
         username: user.username,
@@ -30,10 +30,10 @@ namespace Authentication {
 
   export const get_user_record = async (token: string) => {
     try {
-      const decoded = await jwt.verify(
+      const decoded = (await jwt.verify(
         token,
         process.env.ACCESS_SECRET as string
-      );
+      )) as JwtPayload;
       const user = db.prisma.user.findFirst({
         where: {
           username: decoded.username,
@@ -71,8 +71,13 @@ namespace Authentication {
 
   export const refreshToken = async (token: string) => {
     try {
-      const tokenDecoded = Authentication.get_user(token);
-      const _user = await check_if_user_exists(tokenDecoded);
+      const tokenDecoded = (await Authentication.get_user(token)) as JwtPayload;
+      if (typeof tokenDecoded === "string") {
+        throw new Error("Invalid token");
+      }
+      const _user = await check_if_user_exists({
+        username: tokenDecoded.username,
+      });
 
       console.log(process.env.ACCESS_SECRET);
       console.log(_user);

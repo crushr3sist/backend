@@ -29,7 +29,7 @@ namespace Register {
         },
       });
     } catch {
-      (e) => {
+      (e: any) => {
         console.log(e);
       };
     }

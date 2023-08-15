@@ -7,45 +7,43 @@ const users_router = express.Router();
 
 users_router.post("/refresh", async (req, res, next) => {
   try {
-    let token = await Authentication.refreshToken(req.body.token);
+    const token = await Authentication.refreshToken(req.body.token);
     res.send({ access_token: token });
-  } catch {
-    throw new Error("Error refreshing");
+  } catch (error) {
+    console.error("Error refreshing:", error.message);
+    res.status(500).send("Error refreshing token");
   }
 });
 
 users_router.post("/", async (req, res, next) => {
   try {
-    let user = await Authentication.get_user_record(req.body.token);
+    const user = await Authentication.get_user_record(req.body.token);
     res.send({ user: user });
-  } catch {
-    throw new Error("Error refreshing");
+  } catch (error) {
+    console.error("Error fetching user:", error.message);
+    res.status(500).send("Error fetching user");
   }
 });
 
 users_router.post("/login", async (req, res, next) => {
   try {
-    let token = await Authentication.create_token(req.body);
+    const token = await Authentication.create_token(req.body);
     res.send({ access_token: token });
-  } catch (err) {
-    throw new Error("error with login");
+  } catch (error) {
+    console.error("Error with login:", error.message);
+    res.status(500).send("Error with login");
   }
 });
 
 users_router.post("/register", async (req, res, next) => {
   try {
-    Register.register(req.body)
-      .then(async () => {
-        await db.prisma.$disconnect();
-      })
-      .catch(async (err) => {
-        console.error(err);
-        await db.prisma.$disconnect();
-        next(err);
-        process.exit(1);
-      });
-  } catch (err) {
-    console.log(err);
+    await Register.register(req.body);
+    await db.prisma.$disconnect();
+    res.send("Registration successful");
+  } catch (error) {
+    console.error("Error during registration:", error.message);
+    await db.prisma.$disconnect();
+    res.status(500).send("Error during registration");
   }
 });
 

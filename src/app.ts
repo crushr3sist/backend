@@ -2,7 +2,7 @@
  * Required External Modules
  */
 import * as dontenv from "dotenv";
-import express from "express";
+import express, { Express } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import bodyParser from "body-parser";
@@ -17,7 +17,7 @@ if (!process.env.PORT) {
 
 const PORT: number = parseInt(process.env.PORT as string, 10);
 
-const app = express();
+const app: Express = express();
 
 app.use(helmet());
 app.use(cors());

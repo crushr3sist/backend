@@ -10,59 +10,53 @@ wishlist_router.post("/create/item", async (req, res) => {
   try {
     const wishlist_data = req.body;
     const user = await Authentication.get_user_record(wishlist_data.token);
-    console.log(user);
-    Wishlist.addToWishlist(user, wishlist_data)
-
-      .then(async () => {
-        await db.prisma.$disconnect();
-      })
-      .catch(async (e) => {
-        console.error(e);
-        await db.prisma.$disconnect();
-        process.exit(1);
-      });
-  } catch (err) {
-    console.log(err);
+    await Wishlist.addToWishlist(user, wishlist_data);
+    await db.prisma.$disconnect();
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("Error creating wishlist item:", error.message);
+    await db.prisma.$disconnect();
+    res.status(500).send("Error creating wishlist item");
   }
-  res.sendStatus(200);
 });
 
 wishlist_router.post("/get/all", async (req, res) => {
   try {
     const wishlist_data = req.body;
-    console.log(wishlist_data);
     const user = await Authentication.get_user(wishlist_data.token);
     const allRecords = await Wishlist.getAll(user);
 
     res.send({ all: allRecords });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error("Error fetching all wishlist items:", error.message);
+    res.status(500).send("Error fetching all wishlist items");
   }
 });
 
 wishlist_router.post("/create/wishlist", async (req, res) => {
-  const wishlist_data = req.body;
-
-  const user = await Authentication.get_user(wishlist_data.token);
-
-  Wishlist.create_wishlist(user, wishlist_data.wishListName)
-
-    .then(async () => {
-      await db.prisma.$disconnect();
-    })
-    .catch(async (e) => {
-      console.error(e);
-      await db.prisma.$disconnect();
-      process.exit(1);
-    });
-  res.sendStatus(200);
+  try {
+    const wishlist_data = req.body;
+    const user = await Authentication.get_user(wishlist_data.token);
+    await Wishlist.create_wishlist(user, wishlist_data.wishListName);
+    await db.prisma.$disconnect();
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("Error creating wishlist:", error.message);
+    await db.prisma.$disconnect();
+    res.status(500).send("Error creating wishlist");
+  }
 });
 
 wishlist_router.get("/get/wishlists", async (req, res) => {
-  const user = await Authentication.get_user(req.body.token);
-  const wishlists = await Wishlist.getWishlists(user);
+  try {
+    const user = await Authentication.get_user(req.body.token);
+    const wishlists = await Wishlist.getWishlists(user);
 
-  res.send({ wishlists: wishlists });
+    res.send({ wishlists: wishlists });
+  } catch (error) {
+    console.error("Error fetching wishlists:", error.message);
+    res.status(500).send("Error fetching wishlists");
+  }
 });
 
 export default wishlist_router;
