@@ -30,8 +30,6 @@ describe("Authentication Endpoints", () => {
     expect(response.body.access_token).toBe("newToken");
   });
 
-  // ... other test cases ...
-
   it("should register a user", async () => {
     const registerMock = jest.spyOn(Register, "register");
     registerMock.mockResolvedValue();

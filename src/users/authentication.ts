@@ -7,6 +7,7 @@ namespace Authentication {
     username: string;
     password: string;
   }
+
   const check_if_user_exists = async (user: any) => {
     return await db.prisma.user.findFirst({
       where: {
@@ -75,6 +76,7 @@ namespace Authentication {
       if (typeof tokenDecoded === "string") {
         throw new Error("Invalid token");
       }
+
       const _user = await check_if_user_exists({
         username: tokenDecoded.username,
       });

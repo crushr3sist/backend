@@ -34,5 +34,5 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgres://postgres:Deus69Ex6@localhost/postgres" // uses connection pooling
+  url      = "postgres://postgres:ronny@localhost/postgres" // uses connection pooling
 }

@@ -25,10 +25,10 @@ wishlist_router.post("/get/all", async (req, res) => {
     const wishlist_data = req.body;
     const user = await Authentication.get_user(wishlist_data.token);
     const allRecords = await Wishlist.getAll(user);
-
     res.send({ all: allRecords });
   } catch (error) {
     console.error("Error fetching all wishlist items:", error.message);
+
     res.status(500).send("Error fetching all wishlist items");
   }
 });
@@ -51,7 +51,6 @@ wishlist_router.get("/get/wishlists", async (req, res) => {
   try {
     const user = await Authentication.get_user(req.body.token);
     const wishlists = await Wishlist.getWishlists(user);
-
     res.send({ wishlists: wishlists });
   } catch (error) {
     console.error("Error fetching wishlists:", error.message);
