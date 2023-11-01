@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgres://postgres:ronny@postgres/postgres
+      ACCESS_SECRET: bqYI4BN9nulh1RTYDDryRQ
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ronny
+      POSTGRES_DB: postgres

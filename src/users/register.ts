@@ -17,13 +17,15 @@ namespace Register {
    * @returns a Promise that resolves to either a User object or null.
    */
 	export async function getUserId(user: User): Promise<User | undefined> {
-		return db.prisma.user.findFirst({
+		const foundUser = await db.prisma.user.findFirst({
 			where: {
 				username: user.username,
 				email: user.email,
 				password: user.password,
 			},
 		});
+
+		return foundUser ?? undefined;
 	}
 
 	/**

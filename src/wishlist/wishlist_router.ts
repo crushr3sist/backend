@@ -8,7 +8,7 @@ const wishlist_router = express.Router();
 
 /* The code `wishlist_router.post("/create/item", (req, res) => { ... })` is defining a route for
 creating a new item in a wishlist. */
-wishlist_router.post('/create/item', (req, res) => {
+wishlist_router.post('/create/item', async (req, res) => {
 	try {
 		const wishlist_data = req.body;
 		const user = Authentication.get_user_record(wishlist_data.token);

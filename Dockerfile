@@ -6,6 +6,8 @@ COPY package*.json ./
 
 RUN npm install
 
+RUN npx prisma migrate dev --name init
+
 COPY . .
 
 EXPOSE 8000
