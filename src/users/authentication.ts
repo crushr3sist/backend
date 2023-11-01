@@ -3,7 +3,7 @@ import jwt, {type JwtPayload} from 'jsonwebtoken';
 import 'dotenv/config';
 
 namespace Authentication {
-	interface Auth {
+	export interface Auth {
 		username: string;
 		password: string;
 	}

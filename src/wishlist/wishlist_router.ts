@@ -40,7 +40,7 @@ wishlist_router.post('/get/all', async (req, res) => {
 
 /* The code `wishlist_router.post("/create/wishlist", (req, res) => { ... })` is defining a route for
 creating a new wishlist. */
-wishlist_router.post('/create/wishlist', (req, res) => {
+wishlist_router.post('/create/wishlist', async (req, res) => {
 	try {
 		const wishlist_data = req.body;
 		const user = Authentication.get_user(wishlist_data.token);
@@ -55,10 +55,10 @@ wishlist_router.post('/create/wishlist', (req, res) => {
 
 /* The code `wishlist_router.get("/get/wishlists", (req, res) => { ... })` is defining a route for
 retrieving all wishlists belonging to a user. */
-wishlist_router.get('/get/wishlists', (req, res) => {
+wishlist_router.get('/get/wishlists', async (req, res) => {
 	try {
 		const user = Authentication.get_user(req.body.token);
-		const wishlists = Wishlist.getWishlists(user);
+		const wishlists = await Wishlist.getWishlists(user);
 		res.send({wishlists});
 	} catch (error) {
 		res.status(500).send('Error fetching wishlists');
